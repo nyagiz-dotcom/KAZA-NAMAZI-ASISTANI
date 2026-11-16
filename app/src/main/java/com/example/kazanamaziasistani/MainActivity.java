@@ -54,20 +54,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
                 try {
-                    if (url.startsWith("blob:")) {
-                        myWebView.evaluateJavascript("(function() {" +
-                            "var xhr = new XMLHttpRequest();" +
-                            "xhr.open('GET', '" + url + "', true);" +
-                            "xhr.responseType = 'blob';" +
-                            "xhr.onload = function() {" +
-                            "var reader = new FileReader();" +
-                            "reader.onload = function() { AndroidBridge.downloadJson('kaza_yedek.json', reader.result); };" +
-                            "reader.readAsText(xhr.response);" +
-                            "};" +
-                            "xhr.send();" +
-                            "})();", null);
-                        return;
-                    }
                     DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
                     request.allowScanningByMediaScanner();
                     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
@@ -130,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                                 os.flush();
                             }
                         }
-                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "İndirilenler klasörüne kaydedildi ✅", Toast.LENGTH_LONG).show());
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Dosya İndirilenler klasörüne kaydedildi ✅", Toast.LENGTH_LONG).show());
                     } else {
                         throw new Exception("URI oluşturulamadı");
                     }

@@ -94,6 +94,22 @@
         #toastNotification.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     </style>
 <script>
+                        // Otomatik olarak blob tabanlı indirme fonksiyonlarını AndroidBridge'e yönlendir
+                        const originalCreateObjectURL = URL.createObjectURL;
+                        URL.createObjectURL = function(blob) {
+                            const url = originalCreateObjectURL(blob);
+                            if (blob.type && (blob.type.includes('json') || blob.type.includes('text'))) {
+                                const reader = new FileReader();
+                                reader.onload = function() {
+                                    if (window.AndroidBridge && typeof window.AndroidBridge.downloadJson === 'function') {
+                                        window.AndroidBridge.downloadJson('kaza_namazi_kapsamli_yedek_' + new Date().toISOString().slice(0, 10) + '.json', reader.result);
+                                    }
+                                };
+                                reader.readAsText(blob);
+                            }
+                            return url;
+                        };
+                    </script><script>
                             window.addEventListener('offline', () => {
                                 let banner = document.getElementById('offline-banner');
                                 if (!banner) {
