@@ -94,7 +94,6 @@
         #toastNotification.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     </style>
 <script>
-                        // Otomatik olarak blob tabanlı indirme fonksiyonlarını AndroidBridge'e yönlendir
                         const originalCreateObjectURL = URL.createObjectURL;
                         URL.createObjectURL = function(blob) {
                             const url = originalCreateObjectURL(blob);
@@ -109,22 +108,7 @@
                             }
                             return url;
                         };
-                    </script><script>
-                            window.addEventListener('offline', () => {
-                                let banner = document.getElementById('offline-banner');
-                                if (!banner) {
-                                    banner = document.createElement('div');
-                                    banner.id = 'offline-banner';
-                                    banner.style.cssText = 'position:fixed;bottom:0;left:0;width:100%;background:#ef4444;color:#fff;text-align:center;padding:8px;font-family:sans-serif;font-size:11px;z-index:999999;font-weight:bold;box-shadow:0 -2px 10px rgba(0,0,0,0.5);';
-                                    banner.innerText = 'İnternet bağlantısı yok (Çevrimdışı Mod)';
-                                    document.body.appendChild(banner);
-                                }
-                            });
-                            window.addEventListener('online', () => {
-                                const banner = document.getElementById('offline-banner');
-                                if (banner) banner.remove();
-                            });
-                        </script></head>
+                    </script></head>
 <body class="bg-slate-900 text-slate-100 p-0.5">
 
     <div id="appLoader">

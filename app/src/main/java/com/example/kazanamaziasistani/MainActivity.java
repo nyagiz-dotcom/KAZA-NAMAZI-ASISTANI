@@ -1,6 +1,5 @@
 package com.example.kazanamaziasistani;
 
-import android.app.DownloadManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -53,16 +52,8 @@ public class MainActivity extends AppCompatActivity {
         myWebView.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
-                try {
-                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-                    request.allowScanningByMediaScanner();
-                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "kaza_yedek.json");
-                    DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                    dm.enqueue(request);
-                    Toast.makeText(MainActivity.this, "İndirilenler klasörüne kaydediliyor...", Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "İndirme hatası: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                if (url != null && url.startsWith("blob:")) {
+                    return;
                 }
             }
         });
