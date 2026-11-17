@@ -33,7 +33,7 @@
         /* Sadece rakamlar ve sayısal göstergeler ayardan etkilenir */
         .target-font { font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
         .target-font.active-digital { font-family: 'JetBrains Mono', monospace, sans-serif !important; }
-        .target-font.thin-weight { font-weight: 500 !important; }
+        .target-font.thin-weight { font-weight: 400 !important; }
 
         /* Dijital mod aktifken sadece rakam elementleri JetBrains Mono kullanır */
         body.digital-mode .target-font {
@@ -100,22 +100,7 @@
         }
         #toastNotification.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     </style>
-<script>
-                        const originalCreateObjectURL = URL.createObjectURL;
-                        URL.createObjectURL = function(blob) {
-                            const url = originalCreateObjectURL(blob);
-                            if (blob.type && (blob.type.includes('json') || blob.type.includes('text'))) {
-                                const reader = new FileReader();
-                                reader.onload = function() {
-                                    if (window.AndroidBridge && typeof window.AndroidBridge.downloadJson === 'function') {
-                                        window.AndroidBridge.downloadJson('kaza_namazi_kapsamli_yedek_' + new Date().toISOString().slice(0, 10) + '.json', reader.result);
-                                    }
-                                };
-                                reader.readAsText(blob);
-                            }
-                            return url;
-                        };
-                    </script></head>
+</head>
 <body class="bg-slate-900 text-slate-100 p-0.5">
 
     <div id="appLoader">
@@ -378,7 +363,7 @@
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="text-[10px] font-bold text-slate-300">Font Kalınlığı:</span>
-                        <button id="toggleFontWeightBtn" class="py-2 px-2 rounded-lg font-black text-xs transition-all border flex items-center justify-center gap-1 bg-slate-900 text-slate-300 border-slate-700 shadow">Kalın (Varsayılan)</button>
+                        <button id="toggleFontWeightBtn" class="py-2 px-2 rounded-lg font-black text-xs transition-all border flex items-center justify-center gap-1 bg-emerald-600 text-white border-emerald-400 shadow">Normal (Varsayılan)</button>
                     </div>
                 </div>
 
@@ -564,41 +549,79 @@
                 <button id="closeManualModalHeader" class="text-slate-400 hover:text-white px-2 py-1 text-xs">✕</button>
             </div>
             <div class="flex-1 overflow-y-auto flex flex-col gap-2.5 my-3 pr-1 text-xs text-slate-300 leading-relaxed">
+                
+                <!-- 1. Üst Bilgi ve Vakit Kartı -->
                 <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700/60">
-                    <strong class="text-cyan-400 block mb-1.5 font-black">🕒 1. Üst Bilgi Alanı ve Vakit Kartı</strong>
+                    <strong class="text-cyan-400 block mb-1.5 font-black">🕒 1. Üst Bilgi Kartları ve Vakit Kartı</strong>
                     <div class="text-[11px] leading-relaxed space-y-1">
-                        <p>• <strong class="text-amber-300">Geçen Süre Kartı:</strong> Kronometre veya "Kaza Namazı Kılmaya Başla" butonuna bastığınız andan itibaren uygulamada geçirdiğiniz toplam aktif süreyi canlı olarak sayar.</p>
-                        <p>• <strong class="text-amber-300">Saat Kartı:</strong> Cihazınızın anlık yerel saatini gösterir.</p>
-                        <p>• <strong class="text-amber-300">Konum Seçiciler (Ülke, Şehir, İlçe):</strong> Diyanet takvimine tam uyumlu şekilde konum seçmenizi sağlar. Seçim değiştiğinde imsakiye ve vakitler otomatik güncellenir.</p>
-                        <p>• <strong class="text-amber-300">Vakit Kartı:</strong> Bir sonraki namaz vaktine kalan süreyi geri sayım olarak gösterir. Kerahat vakitlerinde renk değiştirerek uyarı verir. Üzerine dokunduğunuzda <strong class="text-cyan-300">o günün tüm imsakiyesini</strong> (İmsak, Güneş, Öğle, İkindi, Akşam, Yatsı) toplu olarak görebilirsiniz.</p>
+                        <p>• <strong class="text-amber-300">Geçen Süre Kartı (Sol Üst):</strong> Kronometreye veya "Kaza Namazı Kılmaya Başla" butonuna bastığınız andan itibaren uygulamada geçirdiğiniz toplam aktif süreyi (Saat:Dakika:Saniye) canlı sayar.</p>
+                        <p>• <strong class="text-amber-300">Saat Kartı (Sağ Üst):</strong> Cihazınızın anlık yerel saatini canlı gösterir.</p>
+                        <p>• <strong class="text-amber-300">Konum Seçiciler (Ülke / Şehir / İlçe):</strong> Diyanet takvimine tam uyumlu konum seçmenizi sağlar. Değişiklik yapıldığında imsakiye ve vakitler anında güncellenir ve cihaz hafızasına kaydedilir.</p>
+                        <p>• <strong class="text-amber-300">Vakit Geri Sayım Kartı:</strong> Bir sonraki namaz vaktine kalan süreyi, vaktin adını ve saatini gösterir. Güneş doğuşu, öğle istivası ve güneş batışı öncesi 45 dakikalık <strong class="text-rose-400">kerahat vakitlerinde</strong> kırmızı renkle yanıp sönerek uyarı verir.</p>
+                        <p>• <strong class="text-amber-300">Günün Vakitleri Penceresi:</strong> Vakit geri sayım kartının üzerine dokunduğunuzda açılır; o günün Hicri tarihini ve 6 vaktini (İmsak, Güneş, Öğle, İkindi, Akşam, Yatsı) toplu olarak gösterir.</p>
                     </div>
                 </div>
+
+                <!-- 2. Kronometre ve Kaza Namazı Kartı -->
                 <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700/60">
-                    <strong class="text-emerald-400 block mb-1.5 font-black">⏱️ 2. Kronometre ve Kaza Namazı Alanı</strong>
+                    <strong class="text-emerald-400 block mb-1.5 font-black">⏱️ 2. Kronometre ve Vakit / Kaza Kartı</strong>
                     <div class="text-[11px] leading-relaxed space-y-1">
-                        <p>• <strong class="text-emerald-300">Kronometre Kartı:</strong> Üzerine dokunulduğunda sadece kronometreyi başlatır veya sıfırlayıp yeniden başlatır.</p>
-                        <p>• <strong class="text-emerald-300">Kaza Namazı / Namaz Vakitleri Kartı:</strong> "KAZA NAMAZI" modundayken 6 vakti (Sabah, Öğle, İkindi, Akşam, Yatsı, Vitr) kutucuklar halinde gösterir. Seçili vakit turuncu/amber arka plan ve <strong class="text-amber-300">siyah yazı/rakam</strong> ile vurgulanır.</p>
-                        <p>• <strong class="text-emerald-300">Dokunma ve Uzun Basma:</strong> Bir vakit kutucuğuna <strong class="text-white">dokunarak</strong> o vakti seçebilir, <strong class="text-white">basılı tutarak (1.2 sn)</strong> ise o vakte ait kaza sayısını klavyeyle doğrudan düzenleyebilirsiniz.</p>
-                        <p>• <strong class="text-emerald-300">Kılınan & Alt Etiket Alanı:</strong> O anki oturumda kaç kaza namazı kıldığınızı, toplam borç miktarını veya o anki aktif vakit etiketini gösterir.</p>
+                        <p>• <strong class="text-emerald-300">Kronometre Kartı:</strong> Üzerine dokunulduğunda sadece kronometreyi başlatır veya sıfırlayıp yeniden başlatır. Ayarlanan süre dolduğunda otomatik durur.</p>
+                        <p>• <strong class="text-emerald-300">Kaza Namazı Kartı:</strong> 6 vakti (Sabah, Öğle, İkindi, Akşam, Yatsı, Vitr) kutucuklar halinde gösterir. Seçili vakit turuncu/amber arka plan ve siyah yazıyla vurgulanır. Üst sağda o oturumda <strong class="text-white">kılınan</strong> sayısı, altta ise <strong class="text-white">vakitler toplamı</strong> yer alır.</p>
+                        <p>• <strong class="text-emerald-300">Kutucuk Etkileşimi:</strong> Bir vakte <strong class="text-white">kısa dokunarak</strong> o vakti seçebilir, <strong class="text-white">basılı tutarak (1.2 sn)</strong> o vakte ait kaza sayısını klavyeyle doğrudan değiştirebilirsiniz.</p>
+                        <p>• <strong class="text-emerald-300">Namaz Vakitleri Kartı:</strong> Orta menüdeki butondan bu görünüme geçildiğinde, 6 kutucuk Diyanet'in o günkü vakit saatlerini gösterir ve içinde bulunulan <strong class="text-amber-300">aktif vakit</strong> turuncu çerçeve ile vurgulanır.</p>
                     </div>
                 </div>
+
+                <!-- 3. Orta Menü Butonları -->
                 <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700/60">
                     <strong class="text-cyan-400 block mb-1.5 font-black">🎛️ 3. Orta Menü Butonları</strong>
                     <div class="text-[11px] leading-relaxed space-y-1">
-                        <p>• <strong class="text-cyan-300">İmsakiye Butonu:</strong> Diyanet uyumlu aylık imsakiyeyi liste halinde açar; bugünden itibaren ileriye dönük tüm vakitleri inceleyebilirsiniz.</p>
-                        <p>• <strong class="text-cyan-300">Namaz Vakitleri / Kaza Namazı Butonu:</strong> Ana ekrandaki kutucuk görünümünü, Diyanet'in o günkü 6 vakit saat listesi ile anlık aktif vakti gösteren görünüme dönüştürür.</p>
-                        <p>• <strong class="text-cyan-300">Dinî Günler Butonu:</strong> Yıl içerisindeki kandilleri, bayramları, üç ayları ve arife günlerini kalan gün sayacıyla listeleyen sayfayı açar.</p>
+                        <p>• <strong class="text-cyan-300">İmsakiye Butonu:</strong> Seçili ilçe için Diyanet uyumlu ileriye dönük tüm imsakiye günlerini (Miladi/Hicri tarih ve 6 vakit saati) listeleyen sayfayı açar.</p>
+                        <p>• <strong class="text-cyan-300">Namaz Vakitleri / Kaza Namazı Butonu:</strong> Ana ekrandaki orta kartı ve alt sayacı tek dokunuşla "Kaza Namazı Takibi" ile "Anlık Namaz Vakitleri ve Hicri Takvim" görünümleri arasında değiştirir.</p>
+                        <p>• <strong class="text-cyan-300">Dinî Günler Butonu:</strong> Önümüzdeki kandilleri, bayramları, üç ayları ve arife günlerini Hicri/Miladi tarihleri ve kalan gün rozetleriyle listeleyen sayfayı açar.</p>
                     </div>
                 </div>
+
+                <!-- 4. Alt Kontroller ve Ana Eylem Butonu -->
                 <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700/60">
-                    <strong class="text-amber-400 block mb-1.5 font-black">⚙️ 4. Alt Kontroller ve Eylem Butonu</strong>
+                    <strong class="text-amber-400 block mb-1.5 font-black">🔘 4. Alt Kontroller ve Eylem Butonu</strong>
                     <div class="text-[11px] leading-relaxed space-y-1">
-                        <p>• <strong class="text-amber-300">Ayar (Sol Buton):</strong> Hicri hatırlatıcı kaydetme, iki tarih arası otomatik gün hesaplama ve vakitlere eşitleme/ekleme, kılma şekli (Sıralı/Seri), gösterge modu (Vakit/Gün/Hedef), font/kalınlık seçimi ve kronometre süre ayarı (1-60 dk) yer alır.</p>
-                        <p>• <strong class="text-amber-300">Orta Büyük Sayaç Kartı:</strong> Seçili vakit veya toplam borcunuzu gösterir. Üzerine <strong class="text-white">çift tıklayarak</strong> kaza sayısını klavye ile güncelleyebilirsiniz. Namaz Vakitleri görünümündeyken hicri tarih ve yaklaşan dinî gün kayan yazısını gösterir.</p>
-                        <p>• <strong class="text-amber-300">Bilgi (Sağ Buton):</strong> Bugün, hafta, ay ve yıl istatistiklerinizi, günlük ortalamanızı, başarı yüzdenizi, <strong class="text-white">toplam vakit hedefinizi</strong> (çift tıklanarak düzenlenebilir) ve tahmini bitiş tarihinizi gösterir. Dosya yedekleme, 200'lü otomatik yedek geçmişi ve sıfırlama buradadır.</p>
-                        <p>• <strong class="text-amber-300">Kaza Namazı Kılmaya Başla / Kıldım:</strong> Kronometreyi başlatır (Namaz Vakitleri görünümündeyse otomatik olarak Kaza Namazı kartına döner) ve her kıldığınızda sayacı 1 düşürerek istatistiğe kaydeder.</p>
+                        <p>• <strong class="text-amber-300">Ayar Butonu (Sol):</strong> Tüm hesaplama, görünüm, hatırlatıcı ve kronometre ayarlarının bulunduğu sayfayı açar.</p>
+                        <p>• <strong class="text-amber-300">Orta Büyük Sayaç / Takvim Kartı:</strong> Kaza görünümündeyken seçili moda göre toplam borcu, tek vakit borcunu veya kalan hedef sayısını gösterir; <strong class="text-white">çift tıklanarak</strong> değeri elle düzenlenebilir. Namaz Vakitleri görünümündeyken o günün <strong class="text-amber-300">Hicri tarihini</strong> ve yaklaşan <strong class="text-cyan-300">dinî güne kalan süreyi</strong> iki satır halinde gösterir.</p>
+                        <p>• <strong class="text-amber-300">Bilgi Butonu (Sağ):</strong> İstatistikleri, tahmini bitiş tarihini ve yedekleme araçlarını içeren sayfayı açar.</p>
+                        <p>• <strong class="text-amber-300">Kaza Namazı Kılmaya Başla / Kıldım Butonu:</strong> İlk basışta kronometreyi ve geçen süreyi başlatır (Namaz Vakitleri görünümündeyse otomatik Kaza Namazı kartına döner). Sonraki her basışta (<strong class="text-emerald-300">KILDIM</strong>) seçili vaktin borcunu 1 azaltır, istatistiklere işler ve kronometreyi sıfırlayıp yeniden başlatır.</p>
                     </div>
                 </div>
+
+                <!-- 5. Ayar Sayfası Kartları ve Butonları -->
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700/60">
+                    <strong class="text-teal-400 block mb-1.5 font-black">⚙️ 5. Ayar Sayfası Kartları ve Butonları</strong>
+                    <div class="text-[11px] leading-relaxed space-y-1">
+                        <p>• <strong class="text-teal-300">Hicri Hatırlatıcı Kartı:</strong> Özel not (Zekât, Kandil, Oruç vb.) ve Hicri gün/ay seçip <strong class="text-white">Hatırlatıcı Kaydet</strong> butonuna bastığınızda, her yıl o Hicri günde uygulama açılışında uyarı penceresi gösterir.</p>
+                        <p>• <strong class="text-amber-300">İlk Tarih & İkinci Tarih Kartları:</strong> Kaza başlangıcı ile namaza başlama tarihinizi seçtiğinizde aradaki toplam gün sayısını otomatik hesaplar.</p>
+                        <p>• <strong class="text-purple-300">Vakitlere Eşitle / Vakitlere Ekle Butonları:</strong> Hesaplanan gün sayısını tüm 6 vakte doğrudan atar (<strong class="text-white">Eşitle</strong>) veya mevcut kaza borçlarınızın üzerine ilave eder (<strong class="text-white">Ekle</strong>).</p>
+                        <p>• <strong class="text-amber-300">Kılma Şekli Butonu (Sıralı / Seri):</strong> <strong class="text-white">Sıralı</strong> modda her kılınan namazdan sonra bir sonraki vakte otomatik geçer. <strong class="text-white">Seri</strong> modda ise seçili vaktin borcu sıfırlanana kadar aynı vakitte kalır.</p>
+                        <p>• <strong class="text-amber-300">Gösterge Butonu (Vakit / Gün / Hedef):</strong> Ana sayfadaki orta büyük sayaçta tüm vakitlerin toplamını (<strong class="text-white">Vakit</strong>), sadece seçili vaktin sayısını (<strong class="text-white">Gün</strong>) veya belirlediğiniz oturum hedefinden kalanı (<strong class="text-white">Hedef</strong>) gösterir.</p>
+                        <p>• <strong class="text-cyan-300">Sayı Fontu & Kalınlığı Butonları:</strong> Rakamların yazı tipini (<strong class="text-white">Sans-Serif / Dijital</strong>) ve kalınlığını (<strong class="text-white">Normal / Kalın</strong>) değiştirir.</p>
+                        <p>• <strong class="text-amber-300">Hedef Rakam (0 - 100):</strong> "Hedef" gösterge modunda tek seferde kılmak istediğiniz hedef namaz sayısını belirler.</p>
+                        <p>• <strong class="text-emerald-300">Kronometre Süre Ayarı & Süreyi Kaydet:</strong> Kronometrenin kaç dakikaya kadar sayacağını (1-60 dk) ayarlar.</p>
+                    </div>
+                </div>
+
+                <!-- 6. Bilgi / İstatistik Sayfası Kartları ve Butonları -->
+                <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700/60">
+                    <strong class="text-purple-400 block mb-1.5 font-black">📊 6. Bilgi Sayfası Kartları ve Yedekleme</strong>
+                    <div class="text-[11px] leading-relaxed space-y-1">
+                        <p>• <strong class="text-emerald-300">Dönemsel İstatistik Kartları:</strong> <strong class="text-white">Bugün</strong>, <strong class="text-white">Bu Hafta</strong>, <strong class="text-white">Bu Ay</strong>, <strong class="text-white">Bu Yıl</strong> kıldığınız vakitleri, <strong class="text-white">Günlük Ortalama</strong> hızınızı ve <strong class="text-white">Toplam Kılınan</strong> namaz sayısını gösterir.</p>
+                        <p>• <strong class="text-emerald-300">Tamamlanan Yüzde & Toplam Vakit Kartları:</strong> Başlangıçtaki toplam hedefinize göre başarı yüzdenizi gösterir. <strong class="text-white">Toplam Vakit</strong> kartına <strong class="text-white">çift tıklayarak</strong> başlangıç toplam vakit hedefinizi elle düzenleyebilirsiniz.</p>
+                        <p>• <strong class="text-emerald-300">Tahmini Bitiş Tarihi Kartı:</strong> Günlük ortalama kılma hızınıza göre kalan tüm kaza borçlarınızın ne zaman biteceğini hesaplar.</p>
+                        <p>• <strong class="text-cyan-300">Dosyaya Yedekle / Dosyadan Yükle:</strong> Tüm kaza sayılarınızı, istatistiklerinizi, konumunuzu ve ayarlarınızı cihazınıza <code class="text-amber-300">.json</code> dosyası olarak indirir veya daha önce indirdiğiniz dosyadan geri yükler.</p>
+                        <p>• <strong class="text-amber-300">Otomatik Yedekleri Gör & Yükle (200):</strong> Yapılan her değişiklikte cihaz içine otomatik alınan son 200 yedeği listeler ve tek dokunuşla geçmiş bir ana dönmenizi sağlar.</p>
+                        <p>• <strong class="text-rose-300">İstatistik Verilerini Sıfırla:</strong> İki aşamalı onay ile sadece istatistik geçmişini sıfırlar (kalan kaza borçlarınız silinmez).</p>
+                    </div>
+                </div>
+
             </div>
             <button id="closeManualModalFooter" class="w-full py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-xl text-xs transition-colors">Kapat</button>
         </div>
@@ -748,7 +771,7 @@
         let currentVakitTargetCompleted = 0;
         let targetCountValue = 6;
         let fontMode = "sans";
-        let fontWeightMode = "bold";
+        let fontWeightMode = "thin";
         let isIncrementButtonToggled = false;
 
         async function requestWakeLock() {
@@ -1654,10 +1677,10 @@
         function updateFontWeightBtnUI() {
             if (!toggleFontWeightBtn) return;
             if (fontWeightMode === 'thin') {
-                toggleFontWeightBtn.textContent = "Normal (İnce)";
+                toggleFontWeightBtn.textContent = "Normal (Varsayılan)";
                 toggleFontWeightBtn.className = "py-2 px-2 rounded-lg font-black text-xs transition-all border flex items-center justify-center gap-1 bg-emerald-600 text-white border-emerald-400 shadow";
             } else {
-                toggleFontWeightBtn.textContent = "Kalın (Varsayılan)";
+                toggleFontWeightBtn.textContent = "Kalın";
                 toggleFontWeightBtn.className = "py-2 px-2 rounded-lg font-black text-xs transition-all border flex items-center justify-center gap-1 bg-slate-900 text-slate-300 border-slate-700 shadow";
             }
         }
@@ -2221,7 +2244,7 @@
                 if (savedFontWeight) {
                     setFontWeightWeight(savedFontWeight);
                 } else {
-                    setFontWeightWeight('bold');
+                    setFontWeightWeight('thin');
                 }
 
                 if (savedTargetCount) {
@@ -2361,7 +2384,7 @@
             });
         }
 
-        function getMarqueeHolyAndHijriText() {
+        function getHolyAndHijriLines() {
             let hijriText = "";
             if (todayDataGlobal && todayDataGlobal.HicriTarihKisa) {
                 hijriText = formatHijriDisplay(todayDataGlobal.HicriTarihKisa);
@@ -2382,11 +2405,11 @@
                 const itemDate = parseLocalYMD(upcoming.date);
                 const diffDays = Math.round((itemDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
                 if (diffDays === 0) holyText = `${upcoming.name} (Bugün)`;
-                else if (diffDays === 1) holyText = `${upcoming.name} 1 Gün Kaldı`;
-                else holyText = `${upcoming.name} ${diffDays} Gün Kaldı`;
+                else if (diffDays === 1) holyText = `${upcoming.name} 1 gün kaldı`;
+                else holyText = `${upcoming.name} ${diffDays} gün kaldı`;
             }
 
-            return holyText ? `${hijriText}  •  ${holyText}` : hijriText;
+            return { hijriText, holyText };
         }
 
         function updateUI() {
@@ -2398,11 +2421,14 @@
             if (isIncrementButtonToggled) {
                 if (vakitTag) vakitTag.textContent = "Hicri Takvim & Dinî Günler";
                 if (counterDisplay) {
-                    const marqueeStr = getMarqueeHolyAndHijriText();
-                    counterDisplay.className = `${dynamicClass} text-[2.1rem] sm:text-[2.4rem] font-black leading-tight text-amber-400 my-auto select-none w-full overflow-hidden tracking-normal text-left px-2`;
-                    const safeStr = escapeHTML(marqueeStr);
-                    const roundedStr = `${safeStr} &nbsp;&nbsp;&nbsp;&bull;&nbsp;&nbsp;&nbsp; ${safeStr}`;
-                    counterDisplay.innerHTML = `<div class="marquee-wrapper justify-start"><div class="marquee-track"><span class="marquee-item">${roundedStr}</span><span class="marquee-item" aria-hidden="true">${roundedStr}</span></div></div>`;
+                    const { hijriText, holyText } = getHolyAndHijriLines();
+                    counterDisplay.className = `${dynamicClass} my-auto select-none w-full px-1 flex flex-col items-center justify-center text-center leading-tight gap-1`;
+                    const safeHijri = escapeHTML(hijriText);
+                    const safeHoly = escapeHTML(holyText);
+                    counterDisplay.innerHTML = `
+                        <span class="text-[14.5px] sm:text-[16.5px] font-black text-amber-400 tracking-tight w-full leading-tight">${safeHijri}</span>
+                        ${safeHoly ? `<span class="text-[14.5px] sm:text-[16.5px] font-black text-cyan-300 tracking-tight w-full leading-tight">${safeHoly}</span>` : ''}
+                    `;
                 }
             } else {
                 let displayVal = 0, tagVal = currentVakit;
