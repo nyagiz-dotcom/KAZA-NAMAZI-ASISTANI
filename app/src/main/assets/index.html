@@ -2085,7 +2085,7 @@
                     lastUpdated: new Date().toLocaleString('tr-TR')
                 }, null, 2);
 
-                const fileName = `kaza_namazi_asistani_yedek_${new Date().toISOString().slice(0, 10)}.json`;
+                const fileName = `kaza_namazi_kapsamli_yedek_${new Date().toISOString().slice(0, 10)}.json`;
                 const blob = new Blob([backupData], { type: "application/json" });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -2424,8 +2424,8 @@
                     const safeHijri = escapeHTML(hijriText);
                     const safeHoly = escapeHTML(holyText);
                     counterDisplay.innerHTML = `
-                        <span class="text-[14.5px] sm:text-[16.5px] font-black text-amber-400 tracking-tight w-full leading-tight">${safeHijri}</span>
-                        ${safeHoly ? `<span class="text-[14.5px] sm:text-[16.5px] font-black text-cyan-300 tracking-tight w-full leading-tight">${safeHoly}</span>` : ''}
+                        <span class="text-base sm:text-lg font-black text-amber-400 tracking-tight w-full leading-tight">${safeHijri}</span>
+                        ${safeHoly ? `<span class="text-base sm:text-lg font-black text-cyan-300 tracking-tight w-full leading-tight">${safeHoly}</span>` : ''}
                     `;
                 }
             } else {
