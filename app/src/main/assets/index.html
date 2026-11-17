@@ -225,9 +225,7 @@
                         <span class="text-[9px] uppercase tracking-wider text-center leading-tight font-semibold text-cyan-400">Ayar</span>
                     </button>
                     <div id="counterCard" role="button" tabindex="0" aria-label="Kaza Sayısını Elle Düzenlemek için çift tıklayın" aria-live="polite" class="flex-1 h-24 sm:h-28 bg-slate-950 border-2 border-amber-500/40 hover:border-amber-400 rounded-xl flex flex-col items-center justify-center py-1 px-1 shadow-xl relative cursor-pointer active:scale-95 transition-all overflow-hidden">
-                        <div class="w-full flex justify-center items-center px-2 mb-0.5">
-                            <div id="vakitTag" class="text-[10px] text-amber-300 font-black bg-amber-950/80 border border-amber-500/40 px-2.5 py-0.2 rounded-full">Sabah</div>
-                        </div>
+                        
                         <div id="counterDisplay" class="target-font text-[3.2rem] sm:text-[4rem] font-black leading-none text-amber-400 tracking-tighter my-auto select-none">0</div>
                     </div>
                     <button id="openSettingsBtn" class="btn-active w-12 sm:w-14 h-24 sm:h-28 hover:bg-slate-700 text-slate-200 font-bold text-xs py-2 px-1 rounded-xl border border-slate-700 transition-all flex flex-col items-center justify-center gap-1 shadow shrink-0" style="background-color: #0f172a !important;">
@@ -2087,7 +2085,7 @@
                     lastUpdated: new Date().toLocaleString('tr-TR')
                 }, null, 2);
 
-                const fileName = `kaza_namazi_kapsamli_yedek_${new Date().toISOString().slice(0, 10)}.json`;
+                const fileName = `kaza_namazi_asistani_yedek_${new Date().toISOString().slice(0, 10)}.json`;
                 const blob = new Blob([backupData], { type: "application/json" });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -2415,11 +2413,11 @@
         function updateUI() {
             const total = Object.values(countsPerVakit).reduce((a, b) => a + (parseInt(b, 10) || 0), 0);
             const counterDisplay = document.getElementById('counterDisplay');
-            const vakitTag = document.getElementById('vakitTag');
+            
             const dynamicClass = `target-font ${fontMode === 'digital' ? 'active-digital' : ''} ${fontWeightMode === 'thin' ? 'thin-weight' : ''}`;
 
             if (isIncrementButtonToggled) {
-                if (vakitTag) vakitTag.textContent = "Hicri Takvim & Dinî Günler";
+                
                 if (counterDisplay) {
                     const { hijriText, holyText } = getHolyAndHijriLines();
                     counterDisplay.className = `${dynamicClass} my-auto select-none w-full px-1 flex flex-col items-center justify-center text-center leading-tight gap-1`;
@@ -2440,7 +2438,7 @@
                     counterDisplay.className = `${dynamicClass} text-[3.2rem] sm:text-[4rem] font-black leading-none text-amber-400 tracking-tighter my-auto select-none`;
                     counterDisplay.textContent = displayVal;
                 }
-                if (vakitTag) vakitTag.textContent = tagVal;
+                
             }
 
             if (isIncrementButtonToggled) {
