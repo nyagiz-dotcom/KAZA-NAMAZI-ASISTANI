@@ -12,7 +12,14 @@ jobs:
     - uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: '8.7'
-    - run: gradle -p . assembleDebug bundleDebug
+    - name: Build (Maven Central 429 icin 3 deneme)
+      run: |
+        for i in 1 2 3; do
+          gradle -p . assembleDebug bundleDebug --no-daemon --stacktrace && exit 0
+          echo "Deneme $i basarisiz, 60 sn bekleniyor..."
+          sleep 60
+        done
+        exit 1
       working-directory: ${{ github.workspace }}
     - run: |
         mkdir -p output_artifacts
