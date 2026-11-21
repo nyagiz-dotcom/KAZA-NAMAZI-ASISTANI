@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NAMAZ_ASiSTANI_ChatGPT"
+rootProject.name = "NAMAZ_ASiSTANI"
 include ':app'
